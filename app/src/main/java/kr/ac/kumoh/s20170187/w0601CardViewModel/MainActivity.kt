@@ -1,19 +1,44 @@
-package kr.ac.kumoh.prof.w0501precarddealer
+package kr.ac.kumoh.s20170187.w0601CardViewModel
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import androidx.activity.viewModels
+import androidx.lifecycle.Observer
 import kr.ac.kumoh.prof.w0501precarddealer.databinding.ActivityMainBinding
 import kotlin.random.Random
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
+    private val model: CardViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         //setContentView(R.layout.activity_main)
         setContentView(binding.root)
 
+        model.cards.observe(this, Observer <IntArray>{
+            val res = IntArray(5)
+            for (i in it.indices) {
+                it[i] = Random.nextInt(52)
+
+                Log.i(
+                    "Test", "${it[i]} : " +
+                            "${getCardName(it[i])}"
+                )
+
+                res[i] = resources.getIdentifier(
+                    getCardName(it[i]),
+                    "drawable",
+                    packageName
+                )
+            }
+            binding.card1.setImageResource(res[0])
+            binding.card2.setImageResource(res[1])
+            binding.card3.setImageResource(res[2])
+            binding.card4.setImageResource(res[3])
+            binding.card5.setImageResource(res[4])
+        })
         //binding.card1.setImageResource(R.drawable.c_2_of_hearts)
 //        val c = Random.nextInt(52)
 //        Log.i("Test", "$c : ${getCardName(c)}")
@@ -26,31 +51,9 @@ class MainActivity : AppCompatActivity() {
 //
 //        binding.card1.setImageResource(res)
         binding.btnDeal.setOnClickListener {
-            val c = IntArray(5)
-            val res = IntArray(5)
+            model.deal()
+        }
 
-            //for (i in 0..4)
-            //for (i in 0 until 5)
-            //for (i in 0 until c.size)
-            for (i in c.indices) {
-                c[i] = Random.nextInt(52)
-
-                Log.i("Test", "${c[i]} : " +
-                        "${getCardName(c[i])}")
-
-                res[i] = resources.getIdentifier(
-                    getCardName(c[i]),
-                    "drawable",
-                    packageName
-                )
-            }
-
-            //card1.setImageResource(R.drawable.c_2_of_hearts)
-            binding.card1.setImageResource(res[0])
-            binding.card2.setImageResource(res[1])
-            binding.card3.setImageResource(res[2])
-            binding.card4.setImageResource(res[3])
-            binding.card5.setImageResource(res[4])
         }
     }
 
@@ -73,4 +76,3 @@ class MainActivity : AppCompatActivity() {
         }
         return "c_${number}_of_${shape}"
     }
-}
