@@ -5,7 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import androidx.activity.viewModels
 import androidx.lifecycle.Observer
-import kr.ac.kumoh.prof.w0501precarddealer.databinding.ActivityMainBinding
+import kr.ac.kumoh.s20170187.w0601cardviewmodel.databinding.ActivityMainBinding
 import kotlin.random.Random
 
 class MainActivity : AppCompatActivity() {
@@ -17,7 +17,7 @@ class MainActivity : AppCompatActivity() {
         //setContentView(R.layout.activity_main)
         setContentView(binding.root)
 
-        model.cards.observe(this, Observer <IntArray>{
+        model.cards.observe(this, Observer<IntArray> {
             val res = IntArray(5)
             for (i in it.indices) {
                 it[i] = Random.nextInt(52)
@@ -53,11 +53,9 @@ class MainActivity : AppCompatActivity() {
         binding.btnDeal.setOnClickListener {
             model.deal()
         }
-
-        }
     }
 
-    private fun getCardName(c: Int) : String {
+    private fun getCardName(c: Int): String {
         val shape = when (c / 13) {
             0 -> "spades"
             1 -> "diamonds"
@@ -76,3 +74,4 @@ class MainActivity : AppCompatActivity() {
         }
         return "c_${number}_of_${shape}"
     }
+}
